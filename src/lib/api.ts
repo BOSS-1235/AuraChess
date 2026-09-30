@@ -10,7 +10,8 @@ export class ApiError extends Error {
 export async function api<T>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {
   let res: Response
   try {
-    res = await fetch(`/api${path}`, {
+      const BASE_URL = import.meta.env.PROD ? 'https://aurachess.onrender.com' : '';
+      res = await fetch(`${BASE_URL}/api${path}`, {
       method: options.method ?? (options.body ? 'POST' : 'GET'),
       credentials: 'same-origin',
       headers: options.body ? { 'content-type': 'application/json' } : undefined,
