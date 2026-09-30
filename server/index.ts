@@ -15,6 +15,19 @@ import { loadUser } from './session'
 const app = express()
 app.disable('x-powered-by')
 if (config.isProd) app.set('trust proxy', 1) // behind Render/Railway/Fly/etc. so rate limits see the real IP
+app.use((req, res, next) => {
+  const origin = req.get('origin')
+  if (origin && config.allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+  }
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204)
+  }
+  next()
+})
 
 app.use((_req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff')
