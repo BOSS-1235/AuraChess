@@ -14,7 +14,7 @@ export async function api<T>(path: string, options: { method?: string; body?: un
       res = await fetch(`${BASE_URL}/api${path}`, {
       method: options.method ?? (options.body ? 'POST' : 'GET'),
       credentials: 'include',
-      headers: options.body ? { 'content-type': 'application/json' } : undefined,
+      headers: options.body ? { 'content-Type': 'application/json' } : undefined,
       body: options.body ? JSON.stringify(options.body) : undefined
     })
   } catch {
